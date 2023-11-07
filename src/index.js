@@ -2,14 +2,16 @@ import "./style.scss";
 
 const articlesContainer = document.querySelector(".articles-container");
 const categoriesContainer = document.querySelector(".categories");
+const selectElement = document.querySelector("select");
 
 let filter;
 let articles;
+let sortBy = "desc";
 
 const fetchArticles = async () => {
     try {
         filter = null;
-        const response = await fetch("https://restapi.fr/api/cda_lorenzo");
+        const response = await fetch(`https://restapi.fr/api/cda_lorenzo?sort=createdAt:${sortBy}`);
         articles = await response.json();
         if (!(articles instanceof Array)) {
             articles = [articles]
@@ -75,7 +77,7 @@ const createArticlesDOM = () => {
                     method: "DELETE"
                 })
                 const data = await response.json();
-                await fetchArticles();
+                fetchArticles();
             } catch (error) {
                 console.error(error);
             }
@@ -131,3 +133,8 @@ const displayMenuCategories = (categoriesArray) => {
     categoriesContainer.innerHTML = "";
     categoriesContainer.append(...liElements);
 }
+
+selectElement.addEventListener("change", event => {
+    sortBy = selectElement.value;
+    fetchArticles();
+})
