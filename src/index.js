@@ -1,6 +1,7 @@
 import "./style.scss";
 
 const articlesContainer = document.querySelector(".articles-container");
+const categoriesContainer = document.querySelector(".categories");
 
 const fetchArticles = async () => {
     try {
@@ -79,5 +80,26 @@ const createArticlesDOM = (articles) => {
 }
 
 const createMenuCategories = (articles) => {
-    
+    const categories =  articles.reduce((acc, article) => {
+        if(acc[article.category]) {
+            acc[article.category]++;
+        } else {
+            acc[article.category] = 1;
+        }
+        return acc;
+    }, {})
+    const categoriesArray = Object.keys(categories).map(category => [category, categories[category]]);
+    displayMenuCategories(categoriesArray);
+}
+
+const displayMenuCategories = (categoriesArray) => {
+    const liElements = categoriesArray.map(categoryElement => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            ${categoryElement[0]} (<span>${categoryElement[1]}</span>)
+        `
+        return li;
+    })
+    categoriesContainer.innerHTML = "";
+    categoriesContainer.append(...liElements);
 }
