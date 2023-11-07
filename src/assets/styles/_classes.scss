@@ -80,6 +80,11 @@ header {
   color: $text-error;
 }
 
+.active {
+  color: $primary-color;
+  font-weight: bold;
+}
+
 footer {
   grid-area: footer;
   background: $text-color;

@@ -8,6 +8,7 @@ let articles;
 
 const fetchArticles = async () => {
     try {
+        filter = null;
         const response = await fetch("https://restapi.fr/api/cda_lorenzo");
         articles = await response.json();
         if (!(articles instanceof Array)) {
@@ -74,7 +75,7 @@ const createArticlesDOM = () => {
                     method: "DELETE"
                 })
                 const data = await response.json();
-                fetchArticles();
+                await fetchArticles();
             } catch (error) {
                 console.error(error);
             }
@@ -103,7 +104,9 @@ const createMenuCategories = () => {
         }
         return acc;
     }, {})
-    const categoriesArray = Object.keys(categories).map(category => [category, categories[category]]);
+    const categoriesArray = Object.keys(categories)
+        .map(category => [category, categories[category]])
+        .sort((a, b) => a[0].localeCompare(b[0]))
     displayMenuCategories(categoriesArray);
 }
 
@@ -114,7 +117,13 @@ const displayMenuCategories = (categoriesArray) => {
             ${categoryElement[0]} (<span>${categoryElement[1]}</span>)
         `
         li.addEventListener("click", event => {
-            filter = categoryElement[0];
+            liElements.forEach(element => element.classList.remove("active"));
+            if(filter === categoryElement[0]) {
+                filter = null;
+            } else {
+                filter = categoryElement[0];
+                li.classList.add("active");
+            }
             createArticlesDOM();
         })
         return li;
