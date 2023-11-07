@@ -68,7 +68,7 @@ form.addEventListener("submit", async event => {
 });
 
 const formIsValid = (article) => {
-    if (!article.title || !article.title || !article.image || !article.content) {
+    if (!article.title || !article.title || !article.content) {
         errors.push("Vous devez renseigner tous les champs");
     }
 

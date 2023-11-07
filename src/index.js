@@ -3,15 +3,23 @@ import "./style.scss";
 const articlesContainer = document.querySelector(".articles-container");
 const categoriesContainer = document.querySelector(".categories");
 
+let filter;
+let articles;
+
 const fetchArticles = async () => {
     try {
         const response = await fetch("https://restapi.fr/api/cda_lorenzo");
-        let articles = await response.json();
+        articles = await response.json();
         if (!(articles instanceof Array)) {
             articles = [articles]
         }
-        createArticlesDOM(articles);
-        createMenuCategories(articles);
+        if (articles.length) {
+            createArticlesDOM();
+            createMenuCategories();
+        } else {
+            articlesContainer.innerHTML = "<p>Aucun article</p>";
+            categoriesContainer.innerHTML = "<p>Aucune catégorie</p>";
+        }
     } catch (error) {
         console.error(error);
     }
@@ -19,31 +27,38 @@ const fetchArticles = async () => {
 
 fetchArticles();
 
-const createArticlesDOM = (articles) => {
-    const articlesDOM = articles.map(article => {
-        const articleNode = document.createElement("div");
-        articleNode.classList.add("article");
-        articleNode.innerHTML = `
+const createArticlesDOM = () => {
+    const articlesDOM = articles
+        .filter(article => {
+            if (filter) {
+                return article.category === filter;
+            }
+            return true;
+        })
+        .map(article => {
+            const articleNode = document.createElement("div");
+            articleNode.classList.add("article");
+            articleNode.innerHTML = `
          <img src="${article.image ? article.image : 'assets/images/unsplash.jpg'}" alt="Profile image">
          <h2>${article.title}</h2>
          <p class="article-author">${article.author} - <span>${
-            new Date(article.createdAt).toLocaleDateString("fr-FR", {
-                weekday: "long",
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit"
-            })
-        }</span></p> 
+                new Date(article.createdAt).toLocaleDateString("fr-FR", {
+                    weekday: "long",
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                })
+            }</span></p> 
                 <p class="article-content">${article.content}</p>
                 <div class="article-actions">
                     <button class="btn btn-primary" data-id=${article._id}>Éditer</button>
                     <button class="btn btn-danger" data-id=${article._id}>Supprimer</button>
                 </div>
         `
-        return articleNode;
-    });
+            return articleNode;
+        });
 
     articlesContainer.innerHTML = "";
     articlesContainer.append(...articlesDOM);
@@ -79,9 +94,9 @@ const createArticlesDOM = (articles) => {
 
 }
 
-const createMenuCategories = (articles) => {
-    const categories =  articles.reduce((acc, article) => {
-        if(acc[article.category]) {
+const createMenuCategories = () => {
+    const categories = articles.reduce((acc, article) => {
+        if (acc[article.category]) {
             acc[article.category]++;
         } else {
             acc[article.category] = 1;
@@ -98,6 +113,10 @@ const displayMenuCategories = (categoriesArray) => {
         li.innerHTML = `
             ${categoryElement[0]} (<span>${categoryElement[1]}</span>)
         `
+        li.addEventListener("click", event => {
+            filter = categoryElement[0];
+            createArticlesDOM();
+        })
         return li;
     })
     categoriesContainer.innerHTML = "";
