@@ -2,17 +2,15 @@ import "../assets/styles/style.scss";
 import "./form.scss";
 
 let errors = [];
+let articleId
 
 const form = document.querySelector("form");
 const errorList = document.getElementById("errors");
 const cancelBtn = document.querySelector(".btn-secondary");
 
-const params = new URL(location.href);
-const articleId = params.searchParams.get("id");
-
 const initiateForm = async () => {
     const params = new URL(location.href);
-    const articleId = params.searchParams.get("id");
+    articleId = params.searchParams.get("id");
 
     if (articleId) {
         const response = await fetch(`https://restapi.fr/api/cda_lorenzo/${articleId}`);
@@ -44,16 +42,24 @@ form.addEventListener("submit", async event => {
         const json = JSON.stringify(article);
 
         try {
-            const response = await fetch("https://restapi.fr/api/cda_lorenzo", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: json
-            })
+            let response;
+            if(articleId) {
+                response = await fetch(`https://restapi.fr/api/cda_lorenzo/${articleId}`, {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json"},
+                    body: json
+                });
+            } else {
+                response = await fetch("https://restapi.fr/api/cda_lorenzo", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: json
+                })
+            }
 
             if(response.status < 300) {
                 location.assign("./index.html")
             }
-            const data = await response.json();
             form.reset();
         } catch (error) {
             console.error(error);

@@ -10,6 +10,7 @@ const fetchArticles = async () => {
             articles = [articles]
         }
         createArticlesDOM(articles);
+        createMenuCategories(articles);
     } catch (error) {
         console.error(error);
     }
@@ -75,4 +76,8 @@ const createArticlesDOM = (articles) => {
         })
     })
 
+}
+
+const createMenuCategories = (articles) => {
+    
 }
