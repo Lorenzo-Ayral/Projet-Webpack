@@ -72,7 +72,8 @@ const createArticlesDOM = () => {
 
     allDeleteBtns.forEach(btn => {
         btn.addEventListener("click", async event => {
-            openModal("Êtes-vous sûr de vouloir supprimer cet article ?");
+            const answer = await openModal("Êtes-vous sûr de vouloir supprimer cet article ?");
+            if(answer) {
             // try {
             //     const articleId = event.target.dataset.id;
             //     const response = await fetch(`https://restapi.fr/api/cda_lorenzo/${articleId}`, {
@@ -83,6 +84,7 @@ const createArticlesDOM = () => {
             // } catch (error) {
             //     console.error(error);
             // }
+            }
         })
     })
 

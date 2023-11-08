@@ -1,6 +1,8 @@
 const body = document.querySelector('body');
 let calc;
 let modal;
+let cancelBtn;
+let confirmBtn;
 
 const createCalc = () => {
     calc = document.createElement('div');
@@ -13,11 +15,11 @@ const createModal = (question) => {
 
     modal.innerHTML = `<p>${question}</p>`;
 
-    const cancelBtn = document.createElement('button');
+    cancelBtn = document.createElement('button');
     cancelBtn.classList.add('btn', 'btn-secondary');
     cancelBtn.innerText = 'Annuler';
 
-    const confirmBtn = document.createElement('button');
+    confirmBtn = document.createElement('button');
     confirmBtn.classList.add('btn', 'btn-primary');
     confirmBtn.innerText = 'Confirmer';
 
@@ -29,4 +31,19 @@ export function openModal(question) {
     createModal(question);
     calc.append(modal);
     body.append(calc);
+
+    return new Promise((resolve, reject) => {
+        calc.addEventListener('click', event => {
+            resolve(false);
+            calc.remove();
+        })
+        cancelBtn.addEventListener('click', () => {
+            resolve(false);
+            calc.remove();
+        })
+        confirmBtn.addEventListener('click', () => {
+            resolve(true);
+            calc.remove();
+        })
+    })
 }
