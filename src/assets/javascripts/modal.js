@@ -20,8 +20,12 @@ const createModal = (question) => {
     cancelBtn.innerText = 'Annuler';
 
     confirmBtn = document.createElement('button');
-    confirmBtn.classList.add('btn', 'btn-primary');
+    confirmBtn.classList.add('btn', 'btn-danger');
     confirmBtn.innerText = 'Confirmer';
+
+    modal.addEventListener('click', event => {
+        event.stopPropagation();
+    })
 
     modal.append(cancelBtn, confirmBtn);
 }

@@ -1,5 +1,6 @@
 import "../assets/styles/style.scss";
 import "./form.scss";
+import {openModal} from "../assets/javascripts/modal";
 
 let errors = [];
 let articleId
@@ -28,8 +29,11 @@ const fillForm = (article) => {
     })
 }
 
-cancelBtn.addEventListener("click", event => {
-    location.assign("./index.html");
+cancelBtn.addEventListener("click", async event => {
+    const answer = await openModal("Êtes-vous sûr de vouloir annuler la création de cet article ?");
+    if(answer) {
+        location.assign("./index.html");
+    }
 });
 
 form.addEventListener("submit", async event => {

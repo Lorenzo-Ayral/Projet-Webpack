@@ -74,16 +74,16 @@ const createArticlesDOM = () => {
         btn.addEventListener("click", async event => {
             const answer = await openModal("Êtes-vous sûr de vouloir supprimer cet article ?");
             if(answer) {
-            // try {
-            //     const articleId = event.target.dataset.id;
-            //     const response = await fetch(`https://restapi.fr/api/cda_lorenzo/${articleId}`, {
-            //         method: "DELETE"
-            //     })
-            //     const data = await response.json();
-            //     fetchArticles();
-            // } catch (error) {
-            //     console.error(error);
-            // }
+            try {
+                const articleId = event.target.dataset.id;
+                const response = await fetch(`https://restapi.fr/api/cda_lorenzo/${articleId}`, {
+                    method: "DELETE"
+                })
+                const data = await response.json();
+                fetchArticles();
+            } catch (error) {
+                console.error(error);
+            }
             }
         })
     })
