@@ -1,4 +1,5 @@
 import "./style.scss";
+import {openModal} from "./assets/javascripts/modal";
 
 const articlesContainer = document.querySelector(".articles-container");
 const categoriesContainer = document.querySelector(".categories");
@@ -71,16 +72,17 @@ const createArticlesDOM = () => {
 
     allDeleteBtns.forEach(btn => {
         btn.addEventListener("click", async event => {
-            try {
-                const articleId = event.target.dataset.id;
-                const response = await fetch(`https://restapi.fr/api/cda_lorenzo/${articleId}`, {
-                    method: "DELETE"
-                })
-                const data = await response.json();
-                fetchArticles();
-            } catch (error) {
-                console.error(error);
-            }
+            openModal("Êtes-vous sûr de vouloir supprimer cet article ?");
+            // try {
+            //     const articleId = event.target.dataset.id;
+            //     const response = await fetch(`https://restapi.fr/api/cda_lorenzo/${articleId}`, {
+            //         method: "DELETE"
+            //     })
+            //     const data = await response.json();
+            //     fetchArticles();
+            // } catch (error) {
+            //     console.error(error);
+            // }
         })
     })
 
@@ -115,9 +117,12 @@ const createMenuCategories = () => {
 const displayMenuCategories = (categoriesArray) => {
     const liElements = categoriesArray.map(categoryElement => {
         const li = document.createElement("li");
-        li.innerHTML = `
-            ${categoryElement[0]} (<span>${categoryElement[1]}</span>)
-        `
+        li.innerHTML = `${categoryElement[0]} (<span>${categoryElement[1]}</span>)`
+
+        if(categoryElement[0] === filter) {
+            li.classList.add("active");
+        }
+
         li.addEventListener("click", event => {
             liElements.forEach(element => element.classList.remove("active"));
             if(filter === categoryElement[0]) {

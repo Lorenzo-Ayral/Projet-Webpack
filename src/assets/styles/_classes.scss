@@ -85,6 +85,36 @@ header {
   font-weight: bold;
 }
 
+.calc {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba($color: #000000, $alpha: .7);
+
+  @include flex;
+
+  .modal {
+    width: 30%;
+    background: white;
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 40px;
+    box-shadow: $box-shadow;
+    text-align: center;
+
+    p {
+      font-size: 2rem;
+    }
+
+    .btn {
+      margin-top: 30px;
+      margin-right: 10px;
+    }
+  }
+}
+
 footer {
   grid-area: footer;
   background: $text-color;
